@@ -1,0 +1,149 @@
+:root {
+  --panel-width: 320px;
+  --accent: #a14b37;
+}
+
+body {
+  margin: 0;
+  padding: 20px;
+  font-family: Inter, sans-serif;
+  background: #f4f4f4;
+  display: flex;
+  justify-content: center;
+}
+
+.editor {
+  display: flex;
+  gap: 80px;
+}
+
+.stage {
+  width: 360px;
+}
+
+.image-wrapper {
+  width: 360px;
+  position: relative;
+  margin: 0 auto;
+}
+
+.card-frame {
+  width: 360px;
+  height: 640px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 8px solid #3b2d28;
+  position: relative;
+}
+
+.slide-image {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.slide-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.text-item {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  cursor: move;
+  padding: 5px;
+  white-space: pre-wrap;
+  text-align: center;
+}
+
+.text-item.selected {
+  box-shadow: 0 0 0 2px #aaa;
+  border-radius: 5px;
+}
+
+.arrow-left,
+.arrow-right {
+  width: 45px;
+  height: 45px;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-60%);
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.arrow-left {
+  left: -60px;
+}
+
+.arrow-right {
+  right: -70px;
+}
+
+.arrow-left::after {
+  content: "‹";
+  font-size: 26px;
+  color: #333;
+}
+
+.arrow-right::after {
+  content: "›";
+  font-size: 26px;
+  color: #333;
+}
+
+.controls {
+  width: var(--panel-width);
+  padding: 50px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.controls h3 {
+  margin-top: 0;
+}
+
+.field {
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+label {
+  min-width: 70px;
+}
+
+input,
+select {
+  flex: 1;
+  padding: 7px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.btn {
+  background: var(--accent);
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.btn.secondary {
+  background: #e5e5e5;
+  color: #000;
+}
+
+.small {
+  padding: 6px 10px;
+}

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wedding Invitation Editor</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Playfair+Display:wght@400;700&family=Roboto+Slab:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <div class="editor">
+      <div class="stage">
+        <div class="image-wrapper">
+          <div class="arrow-left custom-prev"></div>
+          <div class="card-frame">
+            <div class="swiper mySwiper">
+              <div class="swiper-wrapper">
+                <div class="swiper-slide">
+                  <div class="slide-image" data-slide-index="0">
+                    <img src="/images/Slide-1.jpeg" />
+                  </div>
+                </div>
+                <div class="swiper-slide">
+                  <div class="slide-image" data-slide-index="1">
+                    <img src="/images/Slide-2.jpeg" />
+                  </div>
+                </div>
+                <div class="swiper-slide">
+                  <div class="slide-image" data-slide-index="2">
+                    <img src="/images/Slide-3.jpeg" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="arrow-right custom-next"></div>
+        </div>
+      </div>
+
+      <div class="controls">
+        <h3>Text Editor</h3>
+
+        <div class="field">
+          <button id="addTextBtn" class="btn">+ Add Text</button>
+          <button id="deleteTextBtn" class="btn secondary">Delete</button>
+        </div>
+
+        <div class="field">
+          <label>Font</label>
+          <select id="fontFamily">
+            <option value="Dancing Script, cursive">Dancing Script</option>
+            <option value="'Playfair Display', serif">Playfair Display</option>
+            <option value="'Roboto Slab', serif">Roboto Slab</option>
+            <option value="sans-serif">Sans Serif</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Size</label>
+          <input id="fontSize" type="number" min="10" max="120" value="28" />
+        </div>
+
+        <div class="field">
+          <label>Color</label>
+          <input id="fontColor" type="color" value="#7a2b2b" />
+        </div>
+
+        <div class="field">
+          <label>Align</label>
+          <select id="textAlign">
+            <option value="center">Center</option>
+            <option value="left">Left</option>
+            <option value="right">Right</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Edit</label>
+          <input
+            id="textContent"
+            type="text"
+            placeholder="Edit selected text"
+          />
+        </div>
+
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+
+    <script src="script.js"></script>
+  </body>
+</html>

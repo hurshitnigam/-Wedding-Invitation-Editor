@@ -1,3 +1,4 @@
+/* -------------------- SWIPER SETUP -------------------- */
 const swiper = new Swiper(".mySwiper", {
   navigation: {
     nextEl: ".arrow-right",
@@ -5,18 +6,15 @@ const swiper = new Swiper(".mySwiper", {
   },
 });
 
-const defaultTexts = [
-  "Join us for a beautiful wedding celebration",
-  "With blessings, two hearts become one",
-  "Save the date for a day filled with love",
-];
-
+/* -------------------- GLOBALS -------------------- */
 let selectedEl = null;
 
+/* -------------------- HELPERS -------------------- */
 function getActiveSlide() {
   return document.querySelector(".swiper-slide-active .slide-image");
 }
 
+/* Select a text item */
 function selectText(el) {
   if (selectedEl) selectedEl.classList.remove("selected");
   selectedEl = el;
@@ -29,12 +27,13 @@ function selectText(el) {
   textAlign.value = el.style.textAlign;
 }
 
-addTextBtn.onclick = () => {
-  const slide = getActiveSlide();
-
+/* -------------------- CREATE TEXT ELEMENT -------------------- */
+function createTextElement(str) {
   const text = document.createElement("div");
   text.className = "text-item";
-  text.innerText = "Your Text Here";
+  text.setAttribute("contenteditable", "true");
+
+  text.innerText = str;
 
   text.style.left = "50%";
   text.style.top = "50%";
@@ -43,11 +42,20 @@ addTextBtn.onclick = () => {
   text.style.fontFamily = fontFamily.value;
   text.style.textAlign = textAlign.value;
 
+  return text;
+}
+
+/* -------------------- ADD TEXT -------------------- */
+addTextBtn.onclick = () => {
+  const slide = getActiveSlide();
+  const text = createTextElement("Your Text Here");
+
   slide.appendChild(text);
   makeDraggable(text, slide);
   selectText(text);
 };
 
+/* -------------------- DELETE TEXT -------------------- */
 deleteTextBtn.onclick = () => {
   if (selectedEl) {
     selectedEl.remove();
@@ -55,6 +63,16 @@ deleteTextBtn.onclick = () => {
   }
 };
 
+/* -------------------- CLICK TO EDIT -------------------- */
+document.addEventListener("click", (e) => {
+  const textItem = e.target.closest(".text-item");
+  if (textItem) {
+    selectText(textItem);
+    textItem.focus();
+  }
+});
+
+/* -------------------- SIDEBAR CONTROLS -------------------- */
 textContent.oninput = () =>
   selectedEl && (selectedEl.innerText = textContent.value);
 fontSize.oninput = () =>
@@ -66,15 +84,16 @@ fontFamily.onchange = () =>
 textAlign.onchange = () =>
   selectedEl && (selectedEl.style.textAlign = textAlign.value);
 
+/* -------------------- DRAGGING LOGIC -------------------- */
 function makeDraggable(el, parent) {
   let isDown = false,
-    startX,
-    startY,
-    initL,
-    initT;
+    isDragging = false;
+  let startX, startY, initL, initT;
 
   el.addEventListener("pointerdown", (e) => {
     isDown = true;
+    isDragging = false;
+
     selectText(el);
 
     const rect = el.getBoundingClientRect();
@@ -86,42 +105,42 @@ function makeDraggable(el, parent) {
     initT = rect.top - pRect.top;
   });
 
-  window.addEventListener("pointerup", () => (isDown = false));
-
   window.addEventListener("pointermove", (e) => {
     if (!isDown || !selectedEl) return;
 
+    const diffX = e.clientX - startX;
+    const diffY = e.clientY - startY;
+
+    if (!isDragging && Math.abs(diffX) < 5 && Math.abs(diffY) < 5) return;
+
+    isDragging = true;
+    el.blur(); // prevent typing mode while dragging
+
     const pRect = parent.getBoundingClientRect();
 
-    let newLeft = initL + (e.clientX - startX);
-    let newTop = initT + (e.clientY - startY);
+    let newLeft = initL + diffX;
+    let newTop = initT + diffY;
 
-    newLeft = Math.max(
-      0,
-      Math.min(newLeft, pRect.width - selectedEl.offsetWidth)
-    );
-    newTop = Math.max(
-      0,
-      Math.min(newTop, pRect.height - selectedEl.offsetHeight)
-    );
+    newLeft = Math.max(0, Math.min(newLeft, pRect.width - el.offsetWidth));
+    newTop = Math.max(0, Math.min(newTop, pRect.height - el.offsetHeight));
 
-    selectedEl.style.left = (newLeft / pRect.width) * 100 + "%";
-    selectedEl.style.top = (newTop / pRect.height) * 100 + "%";
-    selectedEl.style.transform = "translate(0,0)";
+    el.style.left = (newLeft / pRect.width) * 100 + "%";
+    el.style.top = (newTop / pRect.height) * 100 + "%";
+    el.style.transform = "translate(0,0)";
   });
+
+  window.addEventListener("pointerup", () => (isDown = false));
 }
 
-document.querySelectorAll(".slide-image").forEach((slide, index) => {
-  const text = document.createElement("div");
-  text.className = "text-item";
+/* -------------------- DEFAULT TEXT PER SLIDE -------------------- */
+const defaultTexts = [
+  "Join us for a beautiful wedding celebration",
+  "With blessings, two hearts become one",
+  "Save the date for a day filled with love",
+];
 
-  text.innerText = defaultTexts[index];
-
-  text.style.left = "50%";
-  text.style.top = "35%";
-  text.style.fontSize = "22px";
-  text.style.color = "#602020";
-  text.style.fontFamily = "Dancing Script, cursive";
+document.querySelectorAll(".slide-image").forEach((slide, i) => {
+  const text = createTextElement(defaultTexts[i]);
 
   slide.appendChild(text);
   makeDraggable(text, slide);

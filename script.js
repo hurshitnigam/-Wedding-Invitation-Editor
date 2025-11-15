@@ -1,4 +1,4 @@
-/* -------------------- SWIPER SETUP -------------------- */
+
 const swiper = new Swiper(".mySwiper", {
   navigation: {
     nextEl: ".arrow-right",
@@ -6,15 +6,15 @@ const swiper = new Swiper(".mySwiper", {
   },
 });
 
-/* -------------------- GLOBALS -------------------- */
+
 let selectedEl = null;
 
-/* -------------------- HELPERS -------------------- */
+
 function getActiveSlide() {
   return document.querySelector(".swiper-slide-active .slide-image");
 }
 
-/* Select a text item */
+
 function selectText(el) {
   if (selectedEl) selectedEl.classList.remove("selected");
   selectedEl = el;
@@ -27,7 +27,7 @@ function selectText(el) {
   textAlign.value = el.style.textAlign;
 }
 
-/* -------------------- CREATE TEXT ELEMENT -------------------- */
+
 function createTextElement(str) {
   const text = document.createElement("div");
   text.className = "text-item";
@@ -45,7 +45,7 @@ function createTextElement(str) {
   return text;
 }
 
-/* -------------------- ADD TEXT -------------------- */
+
 addTextBtn.onclick = () => {
   const slide = getActiveSlide();
   const text = createTextElement("Your Text Here");
@@ -55,7 +55,7 @@ addTextBtn.onclick = () => {
   selectText(text);
 };
 
-/* -------------------- DELETE TEXT -------------------- */
+
 deleteTextBtn.onclick = () => {
   if (selectedEl) {
     selectedEl.remove();
@@ -63,7 +63,7 @@ deleteTextBtn.onclick = () => {
   }
 };
 
-/* -------------------- CLICK TO EDIT -------------------- */
+
 document.addEventListener("click", (e) => {
   const textItem = e.target.closest(".text-item");
   if (textItem) {
@@ -72,7 +72,7 @@ document.addEventListener("click", (e) => {
   }
 });
 
-/* -------------------- SIDEBAR CONTROLS -------------------- */
+
 textContent.oninput = () =>
   selectedEl && (selectedEl.innerText = textContent.value);
 fontSize.oninput = () =>
@@ -84,7 +84,7 @@ fontFamily.onchange = () =>
 textAlign.onchange = () =>
   selectedEl && (selectedEl.style.textAlign = textAlign.value);
 
-/* -------------------- DRAGGING LOGIC -------------------- */
+
 function makeDraggable(el, parent) {
   let isDown = false,
     isDragging = false;
@@ -114,7 +114,7 @@ function makeDraggable(el, parent) {
     if (!isDragging && Math.abs(diffX) < 5 && Math.abs(diffY) < 5) return;
 
     isDragging = true;
-    el.blur(); // prevent typing mode while dragging
+    el.blur(); 
 
     const pRect = parent.getBoundingClientRect();
 
@@ -132,7 +132,7 @@ function makeDraggable(el, parent) {
   window.addEventListener("pointerup", () => (isDown = false));
 }
 
-/* -------------------- DEFAULT TEXT PER SLIDE -------------------- */
+
 const defaultTexts = [
   "Join us for a beautiful wedding celebration",
   "With blessings, two hearts become one",

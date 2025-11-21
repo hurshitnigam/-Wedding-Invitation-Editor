@@ -1,4 +1,3 @@
-
 const swiper = new Swiper(".mySwiper", {
   navigation: {
     nextEl: ".arrow-right",
@@ -6,14 +5,11 @@ const swiper = new Swiper(".mySwiper", {
   },
 });
 
-
 let selectedEl = null;
-
 
 function getActiveSlide() {
   return document.querySelector(".swiper-slide-active .slide-image");
 }
-
 
 function selectText(el) {
   if (selectedEl) selectedEl.classList.remove("selected");
@@ -25,36 +21,31 @@ function selectText(el) {
   fontColor.value = el.style.color;
   fontFamily.value = el.style.fontFamily;
   textAlign.value = el.style.textAlign;
+  boxWidth.value = parseInt(el.style.width) || 200;
 }
-
 
 function createTextElement(str) {
   const text = document.createElement("div");
   text.className = "text-item";
   text.setAttribute("contenteditable", "true");
-
   text.innerText = str;
-
   text.style.left = "50%";
   text.style.top = "50%";
   text.style.fontSize = fontSize.value + "px";
   text.style.color = fontColor.value;
   text.style.fontFamily = fontFamily.value;
   text.style.textAlign = textAlign.value;
-
+  text.style.width = "200px";
   return text;
 }
-
 
 addTextBtn.onclick = () => {
   const slide = getActiveSlide();
   const text = createTextElement("Your Text Here");
-
   slide.appendChild(text);
   makeDraggable(text, slide);
   selectText(text);
 };
-
 
 deleteTextBtn.onclick = () => {
   if (selectedEl) {
@@ -62,7 +53,6 @@ deleteTextBtn.onclick = () => {
     selectedEl = null;
   }
 };
-
 
 document.addEventListener("click", (e) => {
   const textItem = e.target.closest(".text-item");
@@ -72,26 +62,34 @@ document.addEventListener("click", (e) => {
   }
 });
 
-
 textContent.oninput = () =>
   selectedEl && (selectedEl.innerText = textContent.value);
+
 fontSize.oninput = () =>
   selectedEl && (selectedEl.style.fontSize = fontSize.value + "px");
+
 fontColor.oninput = () =>
   selectedEl && (selectedEl.style.color = fontColor.value);
+
 fontFamily.onchange = () =>
   selectedEl && (selectedEl.style.fontFamily = fontFamily.value);
+
 textAlign.onchange = () =>
   selectedEl && (selectedEl.style.textAlign = textAlign.value);
 
+boxWidth.oninput = () => {
+  if (selectedEl) {
+    selectedEl.style.width = boxWidth.value + "px";
+  }
+};
 
 function makeDraggable(el, parent) {
-  let isDown = false,
-    isDragging = false;
+  let isPointerDown = false;
+  let isDragging = false;
   let startX, startY, initL, initT;
 
   el.addEventListener("pointerdown", (e) => {
-    isDown = true;
+    isPointerDown = true;
     isDragging = false;
 
     selectText(el);
@@ -106,7 +104,7 @@ function makeDraggable(el, parent) {
   });
 
   window.addEventListener("pointermove", (e) => {
-    if (!isDown || !selectedEl) return;
+    if (!isPointerDown || !selectedEl) return;
 
     const diffX = e.clientX - startX;
     const diffY = e.clientY - startY;
@@ -114,7 +112,7 @@ function makeDraggable(el, parent) {
     if (!isDragging && Math.abs(diffX) < 5 && Math.abs(diffY) < 5) return;
 
     isDragging = true;
-    el.blur(); 
+    el.blur();
 
     const pRect = parent.getBoundingClientRect();
 
@@ -129,9 +127,10 @@ function makeDraggable(el, parent) {
     el.style.transform = "translate(0,0)";
   });
 
-  window.addEventListener("pointerup", () => (isDown = false));
+  window.addEventListener("pointerup", () => {
+    isPointerDown = false;
+  });
 }
-
 
 const defaultTexts = [
   "Join us for a beautiful wedding celebration",
@@ -144,4 +143,16 @@ document.querySelectorAll(".slide-image").forEach((slide, i) => {
 
   slide.appendChild(text);
   makeDraggable(text, slide);
+});
+
+document.addEventListener("click", (e) => {
+  if (e.target.closest(".text-item")) return;
+
+  if (e.target.closest(".controls")) return;
+
+  if (selectedEl) {
+    selectedEl.classList.remove("selected");
+    selectedEl.blur();
+    selectedEl = null;
+  }
 });

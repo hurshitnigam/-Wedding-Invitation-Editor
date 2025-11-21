@@ -147,3 +147,10 @@ select {
 .small {
   padding: 6px 10px;
 }
+
+.text-item {
+  display: block;
+  width: auto;
+  max-width: 90%;
+  word-wrap: break-word;
+}
